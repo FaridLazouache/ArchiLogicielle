@@ -1,1 +1,4 @@
 *.teraform*
+teraform-labs-flazouac/*/.terraform*
+API/__pycache__/*
+**.tfstate*
