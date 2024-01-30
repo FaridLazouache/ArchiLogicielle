@@ -42,7 +42,6 @@ resource "aws_subnet" "this" {
   db_name              	= "magasin"
   identifier	       	= "farid-magasin-db"
   license_model		= "postgresql-license"
-  multi_az		= true
   port 			= 5432
   availability_zone    	= "eu-west-3a"
   engine               	= "postgres"
