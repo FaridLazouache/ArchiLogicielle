@@ -1,11 +1,3 @@
-resource "aws_vpc" "this" {
-  cidr_block           = local.address_space
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-
-  tags = { Name = upper("${var.identifiant}_${terraform.workspace}_VPC") }
-}
-
 resource "aws_default_subnet" "default_az1" {
   availability_zone = "eu-west-3a"
 
@@ -30,13 +22,34 @@ resource "aws_default_subnet" "default_az3" {
   }
 }
 
-resource "aws_subnet" "this" {
-  vpc_id            = aws_vpc.this.id
-  cidr_block        = local.address_space
-  availability_zone = data.aws_availability_zones.available.names[0]
+resource "aws_security_group" "allow_5432" {
+  name        = "allow_5432"
+  description = "Allow 5432 inbound traffic"
+  vpc_id      = data.aws_vpc.selected.id
 
-  tags = { Name = upper("${var.identifiant}_${terraform.workspace}_SUBNET") }
+  tags = {
+    Name = "allow_5432"
+  }
 }
+
+resource "aws_security_group_rule" "allow_rds_to_bastion" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = data.aws_security_group.bastion.id
+  security_group_id        = aws_security_group.allow_5432.id
+}
+
+resource "aws_db_subnet_group" "database" {
+  name       = "database"
+  subnet_ids = [data.aws_subnet.private-a.id,data.aws_subnet.private-b.id]
+
+  tags = {
+    Name = "Groupe de sous-réseaux de Farid"
+  }
+}
+
  resource "aws_db_instance" "default" {
   allocated_storage    	= 10 
   db_name              	= "magasin"
@@ -51,4 +64,6 @@ resource "aws_subnet" "this" {
   password             	= "postgresroot"
   parameter_group_name 	= "default.postgres15"
   skip_final_snapshot  	= true
+  vpc_security_group_ids = [aws_security_group.allow_5432.id]
+  db_subnet_group_name	= aws_db_subnet_group.database.name
 }
