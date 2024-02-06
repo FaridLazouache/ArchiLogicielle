@@ -72,13 +72,3 @@ resource "aws_security_group_rule" "allow_ec2_to_bastion" {
   source_security_group_id = data.aws_security_group.bastion.id
   security_group_id        = aws_security_group.ec2.id
 }
-
-resource "aws_instance" "vm" {
-  ami                    = data.aws_ami.amazon-linux-2.id
-  subnet_id              = data.aws_subnet.private-a.id
-  availability_zone      = data.aws_availability_zones.available.names[0]
-  instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.ec2.id]
-
-  tags = { Name = upper("${var.identifiant}_VM") }
-}

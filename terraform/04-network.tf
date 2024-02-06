@@ -46,18 +46,17 @@ resource "aws_db_subnet_group" "database" {
 }
 
 resource "aws_key_pair" "ec2" {
-  key_name   = "ec2-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKKzF6FhzbxCZ+u/DT21WVlev2e3ASRxWKI8bZ1TBYKxgJzxJGyjyvmphRcBc5fDZAcKfHdJH+hgd62PnW0se8O+M2zXmF5bkeCUcv8jBmW6wcXirtYzf2KoTqHJPMP5URu1AJlWc/+039w6Kdc8JleoDYFvMv7R8l72ctNHxubsb9mgcpuOa5g+n7QK8R1OCHyX7QlD5FBw4pmflq+BGs/Xu4h+KmRYVMnjwahE8vuWj+VOMSAPFZLZU9wk0YyrE86UK/6cksGrEK3a6eOqVo4dJI04JiUdPh172mfH4Bp7j6NAEdEmU9z5I+AXMlIfNfUPwuWVTawKjR61dx9XNR ec2-user@ip-10-0-1-91.eu-west-3.compute.internal"
+  key_name   = "ec2-key-farid"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuM88UAcSO5cVrJLYeHC0y2JaasNb6zEwcH1eMnVFBhjGf5LZ/D8HU6MjhWgnMoV9o2OIQV1adQqU+gtgFPm+KVQSOe59+y9u4IVpq/wfjBwLQ/waa8uELDoD/gFU2TzPudMNwawd6HnrwzuP3iqL06WV43Fg+EIlJcgIyh955xQAUmgYlSU7rZXywY15EAM7Wg/K4652SFewBlAs407fbY/jnt79+gVLCPLMaPoeQ2el2YfHZ/qe6maGb5kHTAQmBpmSz93q2TLMxzz6ZWPJSBhmtYVpJWWE6fxP/Y66ugDl/USaT6xdh2bINkZGGfElB2Tz0AtiQ8sFVJRFvhoGT ec2-user@ip-10-0-1-91.eu-west-3.compute.internal"
 }
 
-resource "aws_instance" "bastion" {
-  ami                         = data.aws_ami.amazon-linux.id
-  subnet_id                   = aws_subnet.public.id
+resource "aws_instance" "farid_api" {
+  ami                         = data.aws_ami.amazon-linux-2.id
+  subnet_id                   = data.aws_subnet.private-a.id 
   availability_zone           = "${var.region}a"
   instance_type               = "t2.micro"
-  vpc_security_group_ids      = [aws_security_group.bastion.id]
-  associate_public_ip_address = true
+  vpc_security_group_ids      = [data.aws_security_group.bastion.id]
   key_name                    = aws_key_pair.ec2.id
 
-  tags = { Name = upper("BASTION_EC2") }
+  tags = { Name = upper("FARID_API") }
 }

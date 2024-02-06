@@ -9,3 +9,8 @@ locals {
 	}
 	address_space = local.address_spaces[terraform.workspace]
 }
+
+variable "region" {
+	description = "Votre Region"
+	default = "eu-west-3"
+}
