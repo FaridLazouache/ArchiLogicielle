@@ -23,20 +23,6 @@ data "aws_subnet" "private-b" {
   }
 }
 
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = ["VPC"]
-  }
-}
-
-data "aws_security_group" "bastion" {
-  filter {
-    name   = "tag:Name"
-    values = ["SG_BASTION_EC2"]
-  }
-}
-
 data "aws_ami" "amazon-linux-2" {
   most_recent = true
 
@@ -50,6 +36,20 @@ data "aws_ami" "amazon-linux-2" {
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm*"]
+  }
+}
+
+data "aws_vpc" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = ["VPC"]
+  }
+}
+
+data "aws_security_group" "bastion" {
+  filter {
+    name   = "tag:Name"
+    values = ["SG_BASTION_EC2"]
   }
 }
 

@@ -1,26 +1,3 @@
-resource "aws_default_subnet" "default_az1" {
-  availability_zone = "eu-west-3a"
-
-  tags = {
-    Name = "Default subnet for eu-west-3a"
-  }
-}
-
-resource "aws_default_subnet" "default_az2" {
-  availability_zone = "eu-west-3b"
-
-  tags = {
-    Name = "Default subnet for eu-west-3b"
-  }
-}
-
-resource "aws_default_subnet" "default_az3" {
-  availability_zone = "eu-west-3c"
-
-  tags = {
-    Name = "Default subnet for eu-west-3c"
-  }
-}
 
 resource "aws_security_group" "allow_5432" {
   name        = "allow_5432"
@@ -66,4 +43,21 @@ resource "aws_db_subnet_group" "database" {
   skip_final_snapshot  	= true
   vpc_security_group_ids = [aws_security_group.allow_5432.id]
   db_subnet_group_name	= aws_db_subnet_group.database.name
+}
+
+resource "aws_key_pair" "ec2" {
+  key_name   = "ec2-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKKzF6FhzbxCZ+u/DT21WVlev2e3ASRxWKI8bZ1TBYKxgJzxJGyjyvmphRcBc5fDZAcKfHdJH+hgd62PnW0se8O+M2zXmF5bkeCUcv8jBmW6wcXirtYzf2KoTqHJPMP5URu1AJlWc/+039w6Kdc8JleoDYFvMv7R8l72ctNHxubsb9mgcpuOa5g+n7QK8R1OCHyX7QlD5FBw4pmflq+BGs/Xu4h+KmRYVMnjwahE8vuWj+VOMSAPFZLZU9wk0YyrE86UK/6cksGrEK3a6eOqVo4dJI04JiUdPh172mfH4Bp7j6NAEdEmU9z5I+AXMlIfNfUPwuWVTawKjR61dx9XNR ec2-user@ip-10-0-1-91.eu-west-3.compute.internal"
+}
+
+resource "aws_instance" "bastion" {
+  ami                         = data.aws_ami.amazon-linux.id
+  subnet_id                   = aws_subnet.public.id
+  availability_zone           = "${var.region}a"
+  instance_type               = "t2.micro"
+  vpc_security_group_ids      = [aws_security_group.bastion.id]
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.ec2.id
+
+  tags = { Name = upper("BASTION_EC2") }
 }
