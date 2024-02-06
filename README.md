@@ -1,6 +1,15 @@
 # ArchiLogicielle
 Documentation RDS : https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html
 
+# Repository
+## Terraform
+- Most of the changes were made in 04-network.tf
+- The file project.tf got a bit modified
+## API
+- The project file is the API/main.py 
+- The shell script just runs the uvicorn command
+## Exercises
+- Practical exercises are located in the folder teraform-labs-flazouac
 
 # Using Terraform
 - Go to the terraform folder
