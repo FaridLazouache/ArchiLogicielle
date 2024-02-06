@@ -52,23 +52,3 @@ data "aws_security_group" "bastion" {
     values = ["SG_BASTION_EC2"]
   }
 }
-
-resource "aws_security_group" "ec2" {
-  name        = "${var.identifiant}_SG_EC2"
-  description = "ec2 Security Group"
-  vpc_id      = data.aws_vpc.selected.id
-  tags        = { Name = "${var.identifiant}_SG_EC2" }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_security_group_rule" "allow_ec2_to_bastion" {
-  type                     = "ingress"
-  from_port                = 22
-  to_port                  = 22
-  protocol                 = "tcp"
-  source_security_group_id = data.aws_security_group.bastion.id
-  security_group_id        = aws_security_group.ec2.id
-}
