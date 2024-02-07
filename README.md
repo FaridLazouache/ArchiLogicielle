@@ -11,11 +11,36 @@ Documentation RDS : https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welco
 ## Exercises
 - Practical exercises are located in the folder teraform-labs-flazouac
 
-# Using Terraform
+# Terraform
 - Go to the terraform folder
 - Make sure to have your AWS credentials written in the ~/.aws/credentials file
 - If you don't have an API Workspace, create one : ```terraform workspace new API```
 - To launch the terraform process, use this command : ```terraform apply```
+
+# Local Database
+- Go to the postgres folder
+- Launch the script launch_server.sh using : ```./launch_server.sh```
+- Create the database using this command : ``` psql -h localhost -U postgres -f init.sql```. The DB's password can be seen inside the script.
+
+# API
+- Make sure the database is running (locally or remotely)
+- Go to the folder API
+- Run the script launch_server.sh using the command : ```./launch_server.sh```
+- The API uses the port 5964
+- Future login page will be at `/login` url
+- The documentation is available at `/docs`
+## Installing API in AWS
+- To connect to bastion from external and to EC2 from bastion use the command below : <br>```ssh ec2-user@[DESTINATION_IP] -i "[KEY_PATH]```
+- Inside Bastion EC2, run the command ```sudo iptables -t nat -A PREROUTING -p tcp --dport 5964 -j DNAT --to-destination [API EC2's IP]:5964``` to forward request to the API, then run the command ```sudo iptables-save``` to save the port forwarding in case of a reboot
+- Now, connect to EC2 using the command below : <br>
+```ssh ec2-user@[EC2_IP] -i "~/.ssh.[EC2_KEY]```
+- get code using the commands below : <br>
+```curl https://raw.githubusercontent.com/FaridLazouache/ArchiLogicielle/develop/API/main.py >> main.py``` <br>
+```curl https://raw.githubusercontent.com/FaridLazouache/ArchiLogicielle/develop/API/launch_server_AWS_EC2.sh >> launch_server.sh```
+- Get the DB ip address using `host [DB Terminal point]`
+- Add the DB ip address using `export DB_HOST=[IP_ADDRESS]`
+
+
 
 
 
@@ -24,6 +49,8 @@ Documentation RDS : https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welco
 
 
 # key
+
+<b>:warning: MAKE SURE TO CHMOD 400 THE KEY FILE :warning:</b>
 
 -----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
@@ -52,5 +79,3 @@ r40iKXs+bffe5gmPLNmxfxkrJ0teEYwp3rqvS5dmZsHPM7MzEBhngnEiCJQ8rS9MXMx53s
 H/UBZ9LCWMf27N5YVfEikyDFmAEHNi7lAmvvRxdcCItz+noaMbUMR7jp+m92p63f4wFaZG
 TSdldBDhjNTenBltAAAAEmE3OTMyNDlAV0wtNlNWUUZCMw==
 -----END OPENSSH PRIVATE KEY-----
-
-<b>MAKE SURE TO CHMOD 400 THE KEY FILE</b>
