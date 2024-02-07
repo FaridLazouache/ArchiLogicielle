@@ -31,7 +31,6 @@ Documentation RDS : https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welco
 - The documentation is available at `/docs`
 ## Installing API in AWS
 - To connect to bastion from external and to EC2 from bastion use the command below : <br>```ssh ec2-user@[DESTINATION_IP] -i "[KEY_PATH]```
-- Inside Bastion EC2, run the command ```sudo iptables -t nat -A PREROUTING -p tcp --dport 5964 -j DNAT --to-destination [API EC2's IP]:5964``` to forward request to the API, then run the command ```sudo iptables-save``` to save the port forwarding in case of a reboot
 - Now, connect to EC2 using the command below : <br>
 ```ssh ec2-user@[EC2_IP] -i "~/.ssh.[EC2_KEY]```
 - Create frontpage and API folder, then go to API <br>
@@ -43,13 +42,18 @@ Documentation RDS : https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welco
 - Add the DB ip address using `export DB_HOST=[IP_ADDRESS]`
 - launch the script : `./launch_server.sh`
 
+## Setting up port Forwarding
+- Inside Bastion EC2, run the command ```sudo iptables -t nat -A PREROUTING -p tcp --dport 5964 -j DNAT --to-destination [API EC2's IP]:5964``` to forward request to the API, then run the command ```sudo iptables-save``` to save the port forwarding in case of a reboot
+- Install apache webserver for HTTP request forwarding : <br>
+`sudo yum update -y`<br>
+`sudo yum install httpd.x86_64 -y`<br>
+`sudo systemctl start httpd`<br><br>
+:warning: <b> yet, HTTP Forwarding (using httpd), seems not working </b> :warning: <br><br>
+- Create a HTTP Forwarding using Apache VirtualHost : <br>
+```sudo curl https://raw.githubusercontent.com/FaridLazouache/ArchiLogicielle/develop/API/virtualhost.conf >> /etc/httpd/conf.d/virtualhost.conf && sudo systemctl restart httpd``` <br>
 
 
-
-
-
-
-
+<br>
 
 # key
 
