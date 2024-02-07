@@ -71,19 +71,19 @@ resource "aws_security_group_rule" "out_80" {
   security_group_id        = aws_security_group.api.id
 }
 
-resource "aws_security_group_rule" "in_8080" {
+resource "aws_security_group_rule" "in_5964" {
   type                     = "ingress"
-  from_port                = 8080
-  to_port                  = 8080
+  from_port                = 5964
+  to_port                  = 5964
   protocol                 = "tcp"
   source_security_group_id = data.aws_security_group.bastion.id
   security_group_id        = aws_security_group.api.id
 }
 
-resource "aws_security_group_rule" "out_8080" {
+resource "aws_security_group_rule" "out_5964" {
   type                     = "egress"
-  from_port                = 8080
-  to_port                  = 8080
+  from_port                = 5964
+  to_port                  = 5964
   protocol                 = "tcp"
   source_security_group_id = data.aws_security_group.bastion.id
   security_group_id        = aws_security_group.api.id
