@@ -32,7 +32,7 @@ Documentation RDS : https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welco
 ## Installing API in AWS
 - To connect to bastion from external and to EC2 from bastion use the command below : <br>```ssh ec2-user@[DESTINATION_IP] -i "[KEY_PATH]```
 - Now, connect to EC2 using the command below : <br>
-```ssh ec2-user@[EC2_IP] -i "~/.ssh/[EC2_KEY]```
+```ssh ec2-user@[EC2_IP] -i "~/.ssh/[EC2_KEY]"```
 - Create frontpage and API folder, then go to API <br>
 `mkdir -p frontpage API && cd API`
 - get code using the commands below : <br>
