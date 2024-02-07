@@ -34,11 +34,14 @@ Documentation RDS : https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welco
 - Inside Bastion EC2, run the command ```sudo iptables -t nat -A PREROUTING -p tcp --dport 5964 -j DNAT --to-destination [API EC2's IP]:5964``` to forward request to the API, then run the command ```sudo iptables-save``` to save the port forwarding in case of a reboot
 - Now, connect to EC2 using the command below : <br>
 ```ssh ec2-user@[EC2_IP] -i "~/.ssh.[EC2_KEY]```
+- Create frontpage and API folder, then go to API <br>
+`mkdir -p frontpage API && cd API`
 - get code using the commands below : <br>
 ```curl https://raw.githubusercontent.com/FaridLazouache/ArchiLogicielle/develop/API/main.py >> main.py``` <br>
 ```curl https://raw.githubusercontent.com/FaridLazouache/ArchiLogicielle/develop/API/launch_server_AWS_EC2.sh >> launch_server.sh```
 - Get the DB ip address using `host [DB Terminal point]`
 - Add the DB ip address using `export DB_HOST=[IP_ADDRESS]`
+- launch the script : `./launch_server.sh`
 
 
 
